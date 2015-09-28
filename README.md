@@ -25,7 +25,30 @@ findLowest :: List -> List -> Pair -> Pair
 findLowest a b c
     | a = [] == c
     | otherwise == findLowest (tail a) b 
-                        (if (cost (head a)) < (cost c)
+                        (if (cost (head a) b) < (cost c b)
                           then (head a) else c)
 ```
 
+# Usage
+
+First compile the package using the makefile
+```
+$ make
+```
+
+Binaries are placed in the bin/ folder once compiled.
+
+Then, use FileGenerator to create a template file for you to use.
+```
+$ ./bin/FileGenerator my_base.txt
+```
+
+This will generate a template file containing building names and their levels.
+Edit the zeroes so the numbers match the level of your *lowest* building.
+
+Once that's done, you can parse the file with the Beachalyzer binary
+```
+$ ./bin/Beachalyzer my_base.txt
+```
+
+Some information will come out and it will give you some helpful information.
