@@ -52,3 +52,9 @@ $ ./bin/Beachalyzer my_base.txt
 ```
 
 Some information will come out and it will give you some helpful information.
+
+# Example Output
+
+Output will typically look like this (included in this project is a test file you can try it out on).
+
+![image](https://bytebucket.org/GodHand/beachalyzer/raw/418abf9f31f91752eb800db9b5899488bf21ac6f/doc/2015-09-27-230632_676x232_scrot.png)
