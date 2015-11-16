@@ -4,6 +4,7 @@
 ; Contains building upgrade information tables
 (provide
   all-buildings
+  get-levels
   total-cost
   (struct-out cost)
   (struct-out building))
@@ -15,6 +16,12 @@
 
 ; Building takes a list of costs in to form a table
 (struct building (name table))
+
+(define (get-levels name table)
+  (if (string=? name
+        (building-name (first table)))
+    (building-table (first table))
+    (get-levels name (rest table))))
 
 (define (total-cost item)
   (+
