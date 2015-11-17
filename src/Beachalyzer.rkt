@@ -24,12 +24,15 @@
 ; matches in-pair to find it's next level upgrade
 ; Example: (get-cost '("headquarters" 18) buildings) => 6320000
 (define (get-cost in-pair buildings)
-  (list 
-    (first in-pair)
-    (total-cost
-    (list-ref
-      (get-levels (first in-pair) buildings)
-      (sub1 (second in-pair))))))
+  (define levels (get-levels (first in-pair) buildings))
+  (if (= (second in-pair) (length levels))
+    (list (first in-pair) +inf.0)
+    (list 
+        (first in-pair)
+        (total-cost
+        (list-ref
+            (get-levels (first in-pair) buildings)
+            (sub1 (second in-pair)))))))
 
 ; Search for the HQ level
 ; Error if HQ was not found
