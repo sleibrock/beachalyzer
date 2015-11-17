@@ -3,33 +3,7 @@
 (require "data/Tables.rkt")
 (require "Functions.rkt")
 
-; Open up a file with the name file-name
-; Return the list of pairs (name level)
-(define (interpret-file file-name)
-  (let*
-    ((infile (open-input-file file-name))
-     (data (accum-file '() infile)))
-    (close-input-port infile)
-    data))
-
-; Recursive file accumulator
-; Checks until file is #eof
-(define (accum-file acc prt)
-  (let
-    ((val (read-line prt)))
-    (if (eof-object? val)
-      acc
-      (accum-file
-        (cons val acc) prt))))
-
-; Parse a string that's in the format of x:y into '(x y)
-(define (parse-string input-str)
-  (let
-    ((new-data (string-split input-str ":")))
-    (list
-      (first new-data)
-      (string->number (string-trim (second new-data))))))
-
+;; All code that defines operations upon buildings goes here
 ; Search for buildings that cost less than the previous
 ; Initially buildings have to cost less than infinity
 ; If nothing is actually left, then return infinity
@@ -48,21 +22,14 @@
 ; Get the cost of an upgrade
 ; in-pair is a '(name level)
 ; matches in-pair to find it's next level upgrade
+; Example: (get-cost '("headquarters" 18) buildings) => 6320000
 (define (get-cost in-pair buildings)
-  (if (string=? (first in-pair)
-                (building-name 
-                  (first buildings)))
-    (list (first in-pair)
-          (if (=
-                (length 
-                  (building-table (first buildings)))
-                (second in-pair))
-          +inf.0
-          (total-cost
-            (list-ref
-              (building-table (first buildings))
-              (second in-pair)))))
-    (get-cost in-pair (rest buildings))))
+  (list 
+    (first in-pair)
+    (total-cost
+    (list-ref
+      (get-levels (first in-pair) buildings)
+      (sub1 (second in-pair))))))
 
 ; Search for the HQ level
 ; Error if HQ was not found
@@ -91,17 +58,16 @@
 (command-line
   #:program "Beachalyzer"
   #:args (infile-name)
-  (let*
-    ((data (map parse-string (interpret-file infile-name)))
-     (lowest (find-lowest data all-buildings (list "nil" +inf.0)))
-     (hq (get-hq-pair data))
-     (diff (round (* 100 (exact->inexact 
-             (/ (second lowest) 
-                (second (get-cost hq all-buildings)))))))
-     (avg (mean-upgrade-cost data all-buildings 0 0)))
-    (printf "Your HQ level is: ~a\n" (second hq))
-    (printf "Your lowest cost building is: ~a\n" (first lowest))
-    (printf "Cost of ~a is: ~a\n" (first lowest) (cprint (second lowest)))
-    (printf "Cost of next HQ is: ~a\n" (cprint (second (get-cost hq all-buildings))))
-    (printf "Ratio between lowest and HQ is: ~a%\n" diff)
-    (printf "Average cost of upgrades is: ~a\n" (cprint avg))))
+  (define data (map parse-string (interpret-file infile-name)))
+  (define lowest (find-lowest data all-buildings (list "nil" +inf.0)))
+  (define hq (get-hq-pair data))
+  (define diff (round (* 100 (exact->inexact
+                               (/ (second lowest)
+                                  (second (get-cost hq all-buildings)))))))
+  (define avg (mean-upgrade-cost data all-buildings 0 0))
+  (printf "Your HQ level is: ~a\n" (second hq))
+  (printf "Your lowest cost building is: ~a\n" (first lowest))
+  (printf "Cost of ~a is: ~a\n" (first lowest) (cprint (second lowest)))
+  (printf "Cost of next HQ is: ~a\n" (cprint (second (get-cost hq all-buildings))))
+  (printf "Ratio between lowest and HQ is: ~a%\n" diff)
+  (printf "Average cost of upgrades is: ~a\n" (cprint avg)))

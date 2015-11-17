@@ -6,10 +6,35 @@
   all-buildings
   get-levels
   total-cost
+  interpret-file
+  parse-string
   (struct-out cost)
   (struct-out building))
 
+;; File IO code here
+; Open up a file with the name file-name
+; Return the list of pairs (name level)
+(define (interpret-file file-name)
+  (define (accum-file acc prt)
+    (define val (read-line prt))
+    (if (eof-object? val)
+      acc
+      (accum-file
+        (cons val acc) prt)))
+  (define infile (open-input-file file-name))
+  (define data (accum-file '() infile))
+  (close-input-port infile)
+  data)
 
+; Parse a string that's in the format of x:y into '(x y)
+(define (parse-string input-str)
+  (let
+    ((new-data (string-split input-str ":")))
+    (list
+      (first new-data)
+      (string->number (string-trim (second new-data))))))
+
+;; Building structure data
 ; The abstract cost of a building
 ; lvl -> HQ level required to build
 (struct cost (lvl wood stone iron))
@@ -17,19 +42,26 @@
 ; Building takes a list of costs in to form a table
 (struct building (name table))
 
+; Get the levels for a building by name
+; (get-levels "headquarters" all-buildings) => '(#<cost>...)
+; Error if Name not in table
 (define (get-levels name table)
-  (if (string=? name
-        (building-name (first table)))
-    (building-table (first table))
-    (get-levels name (rest table))))
+  (if (empty? table)
+    (error (format "~a not in Database" name))
+    (if (string=? name
+                  (building-name (first table)))
+      (building-table (first table))
+      (get-levels name (rest table)))))
 
+; Get the total cost for a building
+; Just applies all struct methods to one cost
 (define (total-cost item)
-  (+
-    (cost-wood item)
-    (cost-stone item)
-    (cost-iron item)))
+  (+ (cost-wood item)
+     (cost-stone item)
+     (cost-iron item)))
 
 ; Define the building structure tables
+; TODO: update for the level 21 buildings!
 (define all-buildings
   (list
     (building
