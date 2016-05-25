@@ -58,3 +58,7 @@ Some information will come out and it will give you some helpful information.
 Output will typically look like this (included in this project is a test file you can try it out on).
 
 ![beaches are expensive](https://raw.githubusercontent.com/sleibrock/beachalyzer/master/doc/2015-09-27-230632_676x232_scrot.png)
+
+# Defense Strategies
+
+If you need advice on defensive upgrades, check out the Strategies.md file.
