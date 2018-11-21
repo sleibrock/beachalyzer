@@ -3,6 +3,7 @@
 (require "data/Tables.rkt")
 (require "Functions.rkt")
 
+
 ;; All code that defines operations upon buildings goes here
 ; Search for buildings that cost less than the previous
 ; Initially buildings have to cost less than infinity
@@ -10,14 +11,13 @@
 (define (find-lowest in-data buildings lowest-pair)
   (if (empty? in-data)
     lowest-pair
-    (find-lowest
-      (rest in-data)
-      buildings
-      (let
-        ((tc (get-cost (first in-data) buildings)))
-        (if (> (second lowest-pair) (second tc))
-          tc
-          lowest-pair)))))
+    (find-lowest (rest in-data)
+                 buildings
+                 (let ((tc (get-cost (first in-data) buildings)))
+                   (if (> (second lowest-pair) (second tc))
+                       tc
+                       lowest-pair)))))
+
 
 ; Get the cost of an upgrade
 ; in-pair is a '(name level)
@@ -27,12 +27,10 @@
   (define levels (get-levels (first in-pair) buildings))
   (if (= (second in-pair) (length levels))
     (list (first in-pair) +inf.0)
-    (list 
-        (first in-pair)
-        (total-cost
-        (list-ref
-            (get-levels (first in-pair) buildings)
-            (sub1 (second in-pair)))))))
+    (list (first in-pair)
+          (total-cost (list-ref (get-levels (first in-pair) buildings)
+                                (second in-pair))))))
+
 
 ; Search for the HQ level
 ; Error if HQ was not found
@@ -43,6 +41,7 @@
       (first in-data)
       (get-hq-pair (cdr in-data)))))
 
+
 ; Get the total average cost of all possible upgrades
 ; Base case when (empty? in-data)
 ; acc and n are mean calculated (mean = acc/n)
@@ -50,14 +49,14 @@
 (define (mean-upgrade-cost in-data buildings acc n)
   (if (empty? in-data)
       (round (inexact->exact (round (/ acc n))))
-      (let
-          ((cost (second (get-cost (first in-data) buildings))))
-        (mean-upgrade-cost
-         (rest in-data)
-         buildings
-         (+ acc (if (= cost +inf.0) 0 cost))
-         (+ n   (if (= cost +inf.0) 0 1))))))
+      (let ((cost (second (get-cost (first in-data) buildings))))
+        (mean-upgrade-cost (rest in-data)
+                           buildings
+                           (+ acc (if (= cost +inf.0) 0 cost))
+                           (+   n (if (= cost +inf.0) 0    1))))))
 
+
+; main program entrypoint
 (command-line
   #:program "Beachalyzer"
   #:args (infile-name)
@@ -74,3 +73,6 @@
   (printf "Cost of next HQ is: ~a\n" (cprint (second (get-cost hq all-buildings))))
   (printf "Ratio between lowest and HQ is: ~a%\n" diff)
   (printf "Average cost of upgrades is: ~a\n" (cprint avg)))
+
+; end
+

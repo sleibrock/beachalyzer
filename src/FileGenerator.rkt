@@ -13,6 +13,8 @@
       list-names)
     (close-output-port outfile)))
 
+
+; file generating entry point
 (command-line
   #:program "File Generator"
   #:args (outfile-name)
