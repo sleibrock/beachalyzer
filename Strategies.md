@@ -105,3 +105,23 @@ might help it survive a barrage.
 The best option is to make your base defense attack on the beach instead 
 of tucking it away in corners, because corners is where grenadiers 
 thrive the most.
+
+
+# Heavies / Bombardiers
+
+One of the newest troops, the Bombardier, provides extreme long-range firepower.
+However, they need a lot of protection because of how fragile they are. They
+can outrange most buildings in the game, but cannot be left alone.
+
+The best setup would be Heavies. Bombardiers cost gunboat energy to deploy, 
+making it not ideal to use troops that also use energy (tanks, scorchers) 
+unless you also boosted for gunboat energy. Heavies synergize well here because of 
+the her Doctor Kavan, and his ability to respawn troops.
+
+Deploy heavies, then deploy bombardiers, and when heavies go down, use Doctor Kavan 
+to bring heavies (and also bombardiers) back so you can keep pushing. Because of Kavan, 
+heavies are easier and cheaper to use and act like riflemen tanks in a sense. Singular 
+boom cannons wouldn't be enough to stop this, and a great deal of prototypes are needed 
+to stop this kind of attack.
+
+This combination is currently one of the most powerful player attacking setups in the game.
